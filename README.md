@@ -59,7 +59,9 @@
 这样写报告的时候，结构可以是：
 
 > 2.x Encoding properties（tuning, variability）
+> 
 > 3.x Decoding results（不同 decoder、不同参数）
+> 
 > 4.x 讨论：spike timing 的作用、population coding 的效率等
 
 ---
