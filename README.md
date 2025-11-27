@@ -83,7 +83,8 @@ project_root/
   ├─ experiments/
   │    ├─ exp_time_window.py  # T_window sweep
   │    ├─ exp_population.py   # N_neurons sweep
-  │    └─ exp_tuning_sigma.py # tuning 宽度 sweep
+  │    ├─ exp_tuning_sigma.py # tuning 宽度 sweep
+  |    └─experiment.ipynb     # 三实验综合
   ├─ analysis/
   │    ├─ psth_fano.py        # PSTH + Fano factor 分析
   │    └─ visualization.py    # 画混淆矩阵、曲线等
