@@ -18,7 +18,7 @@
    * Rate-based MLP 解码
    * **SNN 解码**（Spiking decoder，利用时间信息）
 
-3. 系统性地回答几个**明确的研究问题**（这个就是项目的“灵魂”）：
+3. 系统性地回答几个**明确的研究问题**(但愿能)：
 
    * RQ1：在 Poisson + tuning curve 的方向编码下，**单纯 firing rate（rate code）是否已经足够解码方向？**
    * RQ2：在有时间结构的刺激（比如方向突变、短时刺激）下，**SNN 对 spike timing 的利用是否带来明显优势？**
