@@ -21,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 
 def load_rate_features(
     dataset_path: str,
-    test_size: float = 0.2,
+    test_size: float = 0.3,
     random_state: int = 0,
 ):
     data = np.load(dataset_path, allow_pickle=True)
@@ -61,7 +61,7 @@ class RateMLP(nn.Module):
 
 def train_rate_mlp(
     dataset_path: str,
-    test_size: float = 0.2,
+    test_size: float = 0.1,
     random_state: int = 0,
     batch_size: int = 64,
     n_epochs: int = 50,
@@ -115,12 +115,22 @@ def train_rate_mlp(
     for epoch in range(1, n_epochs + 1):
         model.train()
         running_loss = 0.0
+
         for xb, yb in train_loader:
             xb = xb.to(device)
             yb = yb.to(device)
-
             logits = model(xb)
-            loss = criterion(logits, yb)
+            ce_loss = criterion(logits, yb)
+
+            # ---- L2 Regularization ----
+            l2_lambda = 1e-4
+            l2_loss = 0.0
+            for name, param in model.named_parameters():
+                if "weight" in name:
+                    l2_loss += torch.sum(param ** 2)
+
+            loss = ce_loss + l2_lambda * l2_loss
+            # ---------------------------
 
             optimizer.zero_grad()
             loss.backward()
@@ -129,13 +139,13 @@ def train_rate_mlp(
             running_loss += loss.item()
 
         if epoch % 5 == 0 or epoch == 1:
-            train_acc = eval_accuracy(train_loader)
-            test_acc = eval_accuracy(test_loader)
+            train_acc = eval_accuracy(model, train_loader, device)
+            test_acc = eval_accuracy(model, test_loader, device)
             print(
-                f"Epoch {epoch:3d} | "
-                f"loss {running_loss/len(train_loader):.4f} | "
-                f"train acc {train_acc:.4f} | "
-                f"test acc {test_acc:.4f}"
+            f"Epoch {epoch:3d} | "
+            f"loss {running_loss/len(train_loader):.4f} | "
+            f"train acc {train_acc:.4f} | "
+            f"test acc {test_acc:.4f}"
             )
 
     final_test_acc = eval_accuracy(test_loader)

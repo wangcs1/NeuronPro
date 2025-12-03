@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 def load_rate_features(
     dataset_path: str,
-    test_size: float = 0.2,
+    test_size: float = 0.8,
     random_state: int = 0,
 ):
     """从 npz 数据集中构造 rate 特征并做 train/test 划分。"""
@@ -49,7 +49,7 @@ def train_and_eval_linear(
     dataset_path: str,
     C: float = 1.0,
     max_iter: int = 1000,
-    test_size: float = 0.2,
+    test_size: float = 0.3,
     random_state: int = 0,
 ):
     X_train, X_test, y_train, y_test, directions_deg = load_rate_features(
