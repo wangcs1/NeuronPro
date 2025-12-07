@@ -139,8 +139,8 @@ def train_rate_mlp(
             running_loss += loss.item()
 
         if epoch % 5 == 0 or epoch == 1:
-            train_acc = eval_accuracy(model, train_loader, device)
-            test_acc = eval_accuracy(model, test_loader, device)
+            train_acc = eval_accuracy(train_loader)
+            test_acc = eval_accuracy(test_loader)
             print(
             f"Epoch {epoch:3d} | "
             f"loss {running_loss/len(train_loader):.4f} | "
