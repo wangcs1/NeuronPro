@@ -71,16 +71,10 @@ def compute_psth(
 ):
     """
     计算某个 neuron 在指定方向下的 PSTH（时间上平均 firing rate）。
-
-    返回：
-    - time_bins_ms: 每个时间 bin 的中心（ms）
-    - psth_rate: 每个时间 bin 的平均 firing rate（Hz）
     """
     sel = labels == dir_index
     sp_sel = spikes[sel, :, neuron_idx]  # (n_trials, T_steps)
-    # 每个时间点上，对 trial 求平均
     mean_spikes_per_bin = sp_sel.mean(axis=0)   # (T_steps,)
-    # 0/1 代表每 dt ms 的 spike 概率 → Hz：p / (dt/1000)
     psth_rate = mean_spikes_per_bin / (dt / 1000.0)  # (T_steps,)
     T_steps = sp_sel.shape[1]
     time_bins_ms = np.arange(T_steps) * dt
@@ -95,13 +89,6 @@ def compute_fano(
 ):
     """
     计算所有 neuron 在所有方向上的 Fano factor。
-
-    做法：
-    - 对每个 neuron、每个方向：
-      * 统计每个 trial 的 spike count
-      * 计算 mean, var
-      * Fano = var / mean（忽略 mean 为 0 的情况）
-    - 汇总成一个 list，返回所有有效 Fano 值
     """
     n_examples, T_steps, n_neurons = spikes.shape
     T_sec = (T_steps * dt) / 1000.0
@@ -149,7 +136,6 @@ def analyze_and_plot(
     print(f"Analyzing neuron {neuron_idx}, PSTH direction index {dir_index_for_psth} "
           f"({directions_deg[dir_index_for_psth]} deg)")
 
-    # ---- 1) tuning curve ----
     dir_list, mean_rates = compute_tuning(
         spikes, labels, directions_deg, neuron_idx=neuron_idx,
         T_steps=T_steps, dt=dt,
@@ -163,8 +149,6 @@ def analyze_and_plot(
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
     plt.show()
-
-    # ---- 2) PSTH ----
     time_bins_ms, psth_rate = compute_psth(
         spikes, labels, directions_deg,
         neuron_idx=neuron_idx, dir_index=dir_index_for_psth, dt=dt,
@@ -181,7 +165,6 @@ def analyze_and_plot(
     plt.tight_layout()
     plt.show()
 
-    # ---- 3) Fano factor 分布 ----
     fano_values = compute_fano(spikes, labels, directions_deg, dt=dt)
     print(f"Fano values: mean={fano_values.mean():.3f}, "
           f"std={fano_values.std():.3f}, "

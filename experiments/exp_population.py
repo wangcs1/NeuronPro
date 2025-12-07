@@ -1,23 +1,8 @@
-# experiments/exp_population.py
 """
 exp_population.py
 -----------------
 实验：群体神经元数量 N 对方向解码性能的影响。
-神经元数量越多，解码性能如何提升？Linear / MLP / SNN 的 scaling 是否类似？
 
-固定：
-- 方向数：8 个（0..315，每 45°）
-- 时间窗口：T = 400 ms
-- tuning 宽度 / 噪声：适中
-- 每个方向 trial 数：100
-
-变量：
-- N_neurons ∈ {10, 20, 40, 80}
-
-对每个 N：
-- 生成数据
-- 训练 Linear / MLP / SNN
-- 画出 acc vs N 的三条曲线
 """
 
 from __future__ import annotations
